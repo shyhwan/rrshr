@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           child: Text(a.toString()),
           onPressed: (){
-            print(a);
+            print('수정');
             a++;
           },
         ),
