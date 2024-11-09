@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
           child: Text(a.toString()),
           onPressed: (){
             print('테스트 브렌치 수정수정');
+            print('테스트');
             a++;
           },
         ),
