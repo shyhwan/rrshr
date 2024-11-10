@@ -1,39 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class _MyAppState extends State<MyApp> {
+  String _response = '';
 
-  var a = 1;
+  Future<void> fetchHelloMessage() async {
+    final url = Uri.parse('http://localhost:8081/api/hello');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          _response = response.body;
+        });
+      } else {
+        setState(() {
+          _response = 'Error: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _response = 'Failed to connect to the server';
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHelloMessage();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Text(a.toString()),
-          onPressed: (){
-            print('테스트 브렌치 수정수정');
-            print('테스트');
-            a++;
-          },
-        ),
         appBar: AppBar(
-          title: Text('Header'),
+          title: const Text('Flutter & Spring Boot'),
         ),
-        body: ListView.builder(
-          itemCount: 3,
-          itemBuilder: (context, idx) {
-            return ListTile(
-            leading: Image.asset('spaceEye.jpg'),
-            title: Text('data'),
-            );
-          },
+        body: Center(
+          child: Text(_response),
         ),
-      )
+      ),
     );
   }
 }
